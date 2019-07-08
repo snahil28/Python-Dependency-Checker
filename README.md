@@ -1,7 +1,6 @@
 
 
-**** Implementation of the tool ****
-
+# Implementation of the tool 
 
 The tool is implemented keeping in mind the Secure Software Devlopment Life Cycle(S-SDLC) that tries to address the Security phase right from the very beginning of the development process of a project and doesn't include it as some later stage in the cycle as identifying security issues earlier in the development life cycle reduces cost and rework.
 
@@ -12,12 +11,9 @@ If this tool is hooked into the development environment let's say in a build plu
 Consider a case where we are performing this analysis task at some later stages of SDLC (let's say the tool runs whenever a build is triggered or when an application is being deployed on some testing environment) and say the project is not often being updated but it's still deployed, then we might miss the notification here when a CVE just gets released for any package. In order to solve this probelm, we need to schedule this task before any build or deployment phase and need to run it in regular time intervals for eg. after every 24 hrs or so.
 
 To use this solution for large dozens or hundreds of code repositories this process can be automated and can be included in CI/CD pipeline as an additional task in build system for e.g. Jenkins, where we can add this tool in a task that is scheduled to run after every 24 hrs and generate reports, this report can then be mailed to the development team or can be shared on the slack group. Furthermore, this tool can be enhanced by not only just looking into the 'requirments.txt' file but also going through the entire code base to fetch all the dependencies from *.egg, *.whl, *,zip and *.py files and extract not only the direct dependencies but also the entire chain of dependencies for thorough analysis. This can be done after the project has built so that it's deployable and contain all the packages that needs to be installed to make the project under analysis run successfully. Also as the code base might be very large, depending upon external database like Vuldb is not reliable as it'll be making an enormous no. of requests to htese databases. Also the tool won't work if the website is down, so here local database should be maintained. It should get its data from various databases like NVD or CVE Mitre and their should be a job that is scheduled to run and update this local database daily. Doing so ensures that we are keeping track of the latest vulnerabilities and updates and the project isn't using any vulnerable direct or indirect dependency.
-
-                        ______________________________________________________________________________
                         
                         
-**** Functioning of the tool ****
-
+# Functioning of the tool 
 
 This tool analyzes all the third aprty dependencies of a Python based project that are listed in its 'requirements.txt' file and can be installed using Pip (Python Package Installer).
 
@@ -36,12 +32,9 @@ This tool performs the above operations in the following steps,
 4. It parses all the received results and filter out all the vulnerabilites associated with its package version number. The details of the vulnerability includes the dependency or the package name where the issue is found, its associated CVE number (Common Vulnerability Exposure), date of creation of the CVE, risk level of the vulnerability, and summary describing the vulnerability of the package.
 
 5. It then shows a vulnerability ditribution graph showing us all the dependencies that are vulnerable and how much does it contribute in making the project insecure. Also it tells us the number of vulnerabilities and dependencies found, each in High, Medium and Low risk vulnerability category.
-
-                        ______________________________________________________________________________
                         
                         
-**** Usage of the tool ****
-
+# Usage of the tool 
 
 The tool can be used as an extension in the IDE or a build system and can be scheduled to run once in a day to track down all the outdated packages and any recent CVEs affecting any of the project dependecies. This can also be integrated as a task in Github or any other version control system and can thus become a part of Continuous Integration and Delivery pipeline (CI/CD pipeline) so whenever a developer pushes some code or make a pull request, it triggers this task and performs vulnerability analysis of the project. It can be integrated with the build system say Jenkins, where it can be scheduled to run after every 24 hrs, this will help us to track down all the vulnerabilities in a project that is not updated very often.
 
